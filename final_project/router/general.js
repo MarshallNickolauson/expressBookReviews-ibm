@@ -5,8 +5,16 @@ let users = require('./auth_users.js').users;
 const public_users = express.Router();
 
 public_users.post('/register', (req, res) => {
-    //Write your code here
-    return res.status(300).json({ message: 'Yet to be implemented' });
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (!username) return res.status(400).json({message: 'Please provide a username.'});
+    if (!password) return res.status(400).json({message: 'Please provide a password.'});
+
+    if (!isValid(username)) return res.status(400).json({ message: 'Username already exists.' });
+
+    users.push({username, password});
+    return res.status(201).json(users);
 });
 
 public_users.get('/', function (req, res) {
